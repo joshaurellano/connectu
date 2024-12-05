@@ -1,0 +1,38 @@
+.formcontrol::placeholder {
+  color: white !important;
+  opacity: 1 !important; 
+}
+
+.formcontrol::-webkit-input-placeholder {
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.formcontrol::-moz-placeholder {
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.formcontrol:-ms-input-placeholder {
+  color: white !important;
+  opacity: 1 !important;
+}
+.nav-link {
+  position: relative;
+  color: white;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(128, 0, 255, 0.2);
+  border-radius: 4px; 
+  color: white; 
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+}
+.modal-scrollable-body {
+  max-height: 70vh; 
+  overflow-y: auto; 
+  padding-right: 15px;
+}
