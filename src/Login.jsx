@@ -26,6 +26,7 @@ function Login () {
 
                 navigate("/dashboard");
         } catch (error) {
+            localStorage.removeItem('token');
             navigate("/login");
         }
         
@@ -194,7 +195,7 @@ return (
     }}>
         <Navbar>
             <Container>
-                <Navbar.Brand href = "#home" style={{color:"white"}}>Student Forum App</Navbar.Brand>
+                <Navbar.Brand href = "#home" style={{color:"white"}}>Connect U</Navbar.Brand>
                 <Nav className="justify-content-end">
                 <Nav.Item>
                 <Nav.Link onClick={handleShow} style={{color:"white"}} className='nav-link'>Register</Nav.Link>
@@ -202,13 +203,15 @@ return (
                 </Nav>
             </Container>
         </Navbar>
+
+        {/*Registration Modal */}
         <div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton className="modal-header">
                     <Modal.Title>Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="modal-scrollable-body">
-                <form onSubmit={handleRegister}>
+                <form onSubmit={handleRegister} style={{boxShadow:"0 4px 8px rgba(0, 0, 0, 0.1)", borderRadius:"10px", backgroundColor:"rgba(255, 255, 255, 0.8)"}}>
                     <Form.Group className="mb-3">
                         <Form.Label>Fullname</Form.Label>
                     <Form.Control
