@@ -95,3 +95,7 @@
   transform: translateY(-50%);
   cursor: pointer;
 }
+.custom-modal-width .modal-dialog {
+  max-width: 400px; /* Adjust this value to your desired width */
+  margin: auto; /* Center the modal */
+}

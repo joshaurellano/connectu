@@ -36,27 +36,32 @@ function Dashboard () {
     return (
     <>
         <div>
-        <Navbar variant="dark" expand="lg" className="py-3" style={{backgroundColor:"#1C1C64", color:"white"}}>
+        <Navbar variant="dark" expand="lg" style={{backgroundColor:"#1C1C64", 
+            color:"white",
+            display:"flex",
+            alignItems:"center"
+            }}>
             <Container>
                 <Navbar.Brand href = "#home" style={{color:"white"}}>Connect U</Navbar.Brand>
-                
-            <Navbar.Toggle aria-controls="navbar-content" />  
-            <Navbar.Collapse id = "navbar-content">
-                <Nav className = "ms-auto">
-
-                    <Nav.Link href='#'>Tell us what you feel</Nav.Link>
-                    <Nav.Link  href='#'>Whats New</Nav.Link>
-                    <Nav.Link  href='#'>Chat Us</Nav.Link>
+            <Navbar.Toggle aria-controls="navbarScroll" />  
+            <Navbar.Collapse id = "navbarScroll">
+            <Nav className="me-auto my-2 my-lg-0">
+                <Nav.Link href='#'>Tell us what you feel</Nav.Link>
+                <Nav.Link  href='#'>Whats New</Nav.Link>
+                <Nav.Link  href='#'>Chat Us</Nav.Link>
                 </Nav>
-                    <Form className="d-flex my-2 my-lg-0">
-                        <Form.Control
-                        type="search"
-                        placeholder="Search"
-                        className="me-2"
-                        aria-label="Search"
-                        />
-                    <Button variant="outline-light">Search</Button>
-                    </Form>
+                    
+                <Form inline className="d-flex ms-auto">
+                    <Form.Control
+                    type="search"
+                    placeholder="Search"
+                    className="me-2 mt-3"
+                    aria-label="Search"
+                    style={{ height: '38px' }}
+                    />
+                    <Button variant="outline-success" className='mt-3' style={{
+                        height: '38px',}}>Search</Button>
+                </Form>
 
                 <Nav className='ms-lg-3'>
                 <NavDropdown title={user ? `User: ${user.username}`:'Dropdown'} 
@@ -66,7 +71,7 @@ function Dashboard () {
                         <NavDropdown.Item href="#" onClick={handleLogout}>Logout</NavDropdown.Item>
                 </NavDropdown>
                 </Nav>
-            </Navbar.Collapse>
+                </Navbar.Collapse>
             
             </Container>
         </Navbar>
@@ -74,7 +79,8 @@ function Dashboard () {
        
         </div>
         <div>
-        <Container className='mt-3 mb-6'>
+            <br />
+        <Container className='mb-6'>
         <Card style={{ height: "6rem", 
             textAlign: "center",
             boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",

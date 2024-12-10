@@ -195,7 +195,7 @@ return (
     }}>
         <Navbar>
             <Container>
-                <Navbar.Brand href = "#home" style={{color:"white"}}>Connect U</Navbar.Brand>
+                <Navbar.Brand href = "#home" style={{color:"white", textShadow:"2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Connect U</Navbar.Brand>
                 <Nav className="justify-content-end">
                 <Nav.Item>
                 <Nav.Link onClick={handleShow} style={{color:"white"}} className='nav-link'>Register</Nav.Link>
@@ -206,119 +206,124 @@ return (
 
         {/*Registration Modal */}
         <div>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton className="modal-header">
-                    <Modal.Title>Register</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="modal-scrollable-body">
-                <form onSubmit={handleRegister} style={{boxShadow:"0 4px 8px rgba(0, 0, 0, 0.1)", borderRadius:"10px", backgroundColor:"rgba(255, 255, 255, 0.8)"}}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Fullname</Form.Label>
-                    <Form.Control
-                        type="text" 
-                        value={fullname}  
-                        onChange={(e) => setFullname(e.target.value)}required
-                    />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Phone Number</Form.Label>
-                        <Form.Control
-                        type="tel"
-                        value={phone_number}
-                        onChange={(e) => setPhonenumber(e.target.value)}required />
-                   </Form.Group>
-                   <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}required />
-                   </Form.Group>
-                   <Form.Group>
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                        type="text"
-                        value={rusername}
-                        onChange={(e) => setrusername(e.target.value)}required />
-                   </Form.Group>
-                   <Form.Group>
-                        <Form.Label>Password</Form.Label>
-                        <div style={{ position: 'relative' }}>
-                        <Form.Control
-                        type={showPassword ? "text":"password"}
-                        value={rpassword}
-                        onChange={(e) => setrpassword(e.target.value)}required/>
-                        <div 
-                            onClick={handlePasswordToggle}
-                            style={{
-                            position: 'absolute',
-                            right: '15px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            cursor: 'pointer',
-                            }}>
-                            {showPassword ? <FaEye /> : <FaEyeSlash />}
-                        </div>
-                        </div>
-                   </Form.Group>
-                   <Form.Group style={{paddingBottom:"20px"}}>
-                        <Form.Label>Re enter your Password</Form.Label>
-                        <div style={{ position: 'relative' }}>
-                        <Form.Control
-                        type={showRePassword ? "text":"password"}
-                        value={repassword}
-                        onChange={handleRePassword}required/>
-                        <div 
-                            onClick={handleRePasswordToggle}
-                            style={{
-                            position: 'absolute',
-                            right: '15px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            cursor: 'pointer',
-                            }}>
-                            {showRePassword ? <FaEye /> : <FaEyeSlash />}
-                        </div>
-                        </div>
-                   </Form.Group>
-                   
-                   <Button 
+        <Modal show={show} onHide={handleClose} dialogClassName='custom-modal-width' size="md" centered>
+    <Modal.Header closeButton className="p-4" style={{ backgroundColor: "#3b3b98", color: "#fff" }}>
+        <Modal.Title style={{ fontWeight: "bold" ,textShadow:"2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Sign Up Now</Modal.Title>
+    </Modal.Header>
+    <Modal.Body className="p-4" style={{ backgroundColor: "#f7f9fc"}}>
+        <Form onSubmit={handleRegister}>
+            <Form.Group className="mb-3">
+                <Form.Control
+                    type="text"
+                    placeholder="Full Name"
+                    value={fullname}
+                    onChange={(e) => setFullname(e.target.value)}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Control
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={phone_number}
+                    onChange={(e) => setPhonenumber(e.target.value)}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Control
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Control
+                    type="text"
+                    placeholder="Username"
+                    value={rusername}
+                    onChange={(e) => setrusername(e.target.value)}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+            </Form.Group>
+            <Form.Group className="mb-3" style={{ position: "relative" }}>
+                <Form.Control
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={rpassword}
+                    onChange={(e) => setrpassword(e.target.value)}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+                <FaEye
+                    onClick={handlePasswordToggle}
+                    style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                        color: "#555",
+                    }}
+                />
+            </Form.Group>
+            <Form.Group className="mb-3" style={{ position: "relative" }}>
+                <Form.Control
+                    type={showRePassword ? "text" : "password"}
+                    placeholder="Confirm Password"
+                    value={repassword}
+                    onChange={handleRePassword}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+                <FaEye
+                    onClick={handleRePasswordToggle}
+                    style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                        color: "#555",
+                    }}
+                />
+            </Form.Group>
+            {registerError && <p style={{ color: "red", fontSize: "0.9rem" }}>{registerError}</p>}
+            <Button
                 type="submit"
-                className='w-100'
+                className="w-100 mt-3"
                 style={{
-                    backgroundColor: "white",
-                    color: "black",
+                    backgroundColor: "#3b3b98",
+                    color: "#fff",
+                    borderRadius: "8px",
+                    border: "none",
                 }}
-                disabled={regloading} >
-                {regloading ? ( // Show spinner if loading
-                    <>
-                        <Spinner
-                            as="span"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                        /> Loading...
-                    </>
-                ) : ("Register")}
+                disabled={regloading}>
+                {regloading ? (
+                    <Spinner animation="border" size="sm" role="status" aria-hidden="true" />
+                ) : (
+                    "Register"
+                )}
             </Button>
-                </form>
-                {registerError && <p style={{ color: 'red' }}>{registerError}</p>}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>Close</Button>
-            </Modal.Footer>
-            </Modal>
+        </Form>
+    </Modal.Body>
+</Modal>
             </div>
         <Container>
         <Row className="align-items-center" style={{ minHeight: "100vh" }}>
         <Col>
         <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
             <div>
-            <h1 style={{color:"white",fontSize:"3rem"}}>Connect with Everyone</h1> <br />
+            <h1 style={{color:"white",fontSize:"3rem", textShadow:"2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Connect with Everyone</h1> <br />
             </div>
             <div>
-            <p style ={{color:"white", fontSize:"1.5rem"}}> Ask anything. Feel free to tell what you feel </p>
+            <p style ={{color:"white", fontSize:"1.5rem",textShadow:"2px 2px 4px rgba(0, 0, 0, 0.7)"}}> Ask anything. Feel free to tell what you feel </p>
             </div>      
         </div>
 
@@ -338,7 +343,7 @@ return (
         padding: "20px", 
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"}}>
 
-            <h4 style={{color:"white",paddingBottom: "20px"}}>Login</h4>
+            <h4 style={{color:"white",paddingBottom: "20px",textShadow:"2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Login</h4>
 
             <div style={{marginBottom:"20px"}}>
             <Form.Group controlId="formUsername">
@@ -379,7 +384,7 @@ return (
                     style={{
                     position: 'absolute',
                     right: '10px',
-                    top: '35%',
+                    top: '25%',
                     transform: 'translateY(-50%)',
                     cursor: 'pointer',}}>
                     {showPassword ? <FaEyeSlash style={{color:"white"}} /> : <FaEye style={{color:"white"}} />}
@@ -414,7 +419,7 @@ return (
             </Button>
             </Form.Group>
             <div style={{display:"flex",justifyContent:"center",paddingTop: "20px"}}>
-                <p style={{color:"white"}}>Dont have an account? Register</p>
+                <p style={{color:"white"}}>Dont have an account? <span onClick={handleShow} role="button" >Register</span></p>
             </div>
         </Form> 
         </div>
