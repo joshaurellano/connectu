@@ -175,13 +175,23 @@ const handleRePassword = async (e) => {
 }
 
 {/*for password toggle visibility*/}
+
+{/* For Login Password toggle */}
 const [ showPassword, setShowPasword ] = useState(false);
     const handlePasswordToggle = () => {
         setShowPasword(!showPassword)
     };
+
+{/* For Registration Password toggle */}
 const [ showRePassword, setShowRePassword ] = useState(false);
     const handleRePasswordToggle = () => {
         setShowRePassword(!showRePassword)
+    };
+
+{/* For Reenter Password toggle */}
+const [ showRePass, setShowRePass ] = useState(false);
+    const handleRePassToggle = () => {
+        setShowRePass(!showRePass)
     };
 
 return (
@@ -207,11 +217,11 @@ return (
         {/*Registration Modal */}
         <div>
         <Modal show={show} onHide={handleClose} dialogClassName='custom-modal-width' size="md" centered>
-    <Modal.Header closeButton className="p-4" style={{ backgroundColor: "#3b3b98", color: "#fff" }}>
-        <Modal.Title style={{ fontWeight: "bold" ,textShadow:"2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Sign Up Now</Modal.Title>
-    </Modal.Header>
-    <Modal.Body className="p-4" style={{ backgroundColor: "#f7f9fc"}}>
-        <Form onSubmit={handleRegister}>
+        <Modal.Header closeButton className="p-4" style={{ backgroundColor: "#3b3b98", color: "#fff" }}>
+            <Modal.Title style={{ fontWeight: "bold" ,textShadow:"2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Sign Up Now</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="p-4" style={{ backgroundColor: "#f7f9fc"}}>
+            <Form onSubmit={handleRegister}>
             <Form.Group className="mb-3">
                 <Form.Control
                     type="text"
@@ -252,47 +262,48 @@ return (
                     required
                 />
             </Form.Group>
+
+            {/* Registration password Field */}
             <Form.Group className="mb-3" style={{ position: "relative" }}>
                 <Form.Control
-                    type={showPassword ? "text" : "password"}
+                    type={showRePassword ? "text" : "password"}
                     placeholder="Password"
                     value={rpassword}
                     onChange={(e) => setrpassword(e.target.value)}
                     style={{ borderRadius: "8px" }}
                     required
                 />
-                <FaEye
-                    onClick={handlePasswordToggle}
+                <div onClick={handleRePasswordToggle}
                     style={{
-                        position: "absolute",
-                        right: "10px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        cursor: "pointer",
-                        color: "#555",
-                    }}
-                />
+                    position: 'absolute',
+                    right: '10px',
+                    top: '40%',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer',}}>
+                    {showRePassword ? <FaEyeSlash /> : <FaEye />}
+                    </div>
             </Form.Group>
+
+            {/* Registration Re enter password Field */}
+
             <Form.Group className="mb-3" style={{ position: "relative" }}>
                 <Form.Control
-                    type={showRePassword ? "text" : "password"}
+                    type={showRePass ? "text" : "password"}
                     placeholder="Confirm Password"
                     value={repassword}
                     onChange={handleRePassword}
                     style={{ borderRadius: "8px" }}
                     required
                 />
-                <FaEye
-                    onClick={handleRePasswordToggle}
+                <div onClick={handleRePassToggle}
                     style={{
-                        position: "absolute",
-                        right: "10px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        cursor: "pointer",
-                        color: "#555",
-                    }}
-                />
+                    position: 'absolute',
+                    right: '10px',
+                    top: '40%',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer',}}>
+                    {showRePass ? <FaEyeSlash /> : <FaEye />}
+                    </div>
             </Form.Group>
             {registerError && <p style={{ color: "red", fontSize: "0.9rem" }}>{registerError}</p>}
             <Button
