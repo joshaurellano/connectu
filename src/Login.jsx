@@ -42,6 +42,11 @@ const [error, setError] = useState('');
 {/*const for loading state of login */}
 const [loading, setLoading] = useState(false); // State to track loading
 
+    const [forgotPassshow, setforgotPassShow] = useState(false);
+
+  const handleforgotPassClose = () => setforgotPassShow(false);
+  const handleforgotPassShow = () => setforgotPassShow(true);
+
 const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -326,6 +331,48 @@ return (
     </Modal.Body>
 </Modal>
             </div>
+            {/* Forgot Password */}
+            <div>
+            <Modal show={forgotPassshow} onHide={handleforgotPassClose} backdrop="static"
+        keyboard={false}>
+                <Modal.Header closeButton>
+                <Modal.Title>No problem we can help you get thru your account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Please let us know your username and email <br />
+                <Form>
+
+            <Form.Group className="mb-3">
+                <Form.Control
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Control
+                    type="text"
+                    placeholder="Username"
+                    value={rusername}
+                    onChange={(e) => setrusername(e.target.value)}
+                    style={{ borderRadius: "8px" }}
+                    required
+                />
+            </Form.Group>
+                </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={handleClose}>
+                    Submit
+                </Button>
+                </Modal.Footer>
+            </Modal>
+            </div>
         <Container>
         <Row className="align-items-center" style={{ minHeight: "100vh" }}>
         <Col>
@@ -402,7 +449,7 @@ return (
                     </div>
             </Form.Group> <br />
             </div>
-            <p style={{color:"white",paddingBottom: "10px"}}>Forgot Password?</p>
+            <p style={{color:"white",paddingBottom: "10px"}}> <span role='button' onClick={handleforgotPassShow}>Forgot Password?</span></p>
             <Form.Group controlId="formButton">
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 <Button 
