@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 
 import bgimg from '/5072612.jpg';
 
-function Login () {
+function Login (props) {
     const navigate = useNavigate();
 
     const [user, setUser] = useState(null);
@@ -43,9 +43,17 @@ const [error, setError] = useState('');
 const [loading, setLoading] = useState(false); // State to track loading
 
     const [forgotPassshow, setforgotPassShow] = useState(false);
+    
+  const handleforgotPassClose = () => {
+    setforgotPassShow(false);
+    setIsBlurred(false);  
+}
+  const handleforgotPassShow = () => {
+    setforgotPassShow(true);
+    setIsBlurred(true);}
 
-  const handleforgotPassClose = () => setforgotPassShow(false);
-  const handleforgotPassShow = () => setforgotPassShow(true);
+  const [isBlurred, setIsBlurred] = useState(false);
+
 
 const handleSubmit = async (e) => {
 
@@ -93,6 +101,7 @@ const clearField = () => {
 };
 
 {/*for modal */}
+
 const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => {
@@ -200,7 +209,8 @@ const [ showRePass, setShowRePass ] = useState(false);
     };
 
 return (
-    <div style={{
+    <div className={isBlurred ? "blur-background" : ""}
+    style={{
         backgroundImage: `url(${bgimg})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
@@ -333,8 +343,16 @@ return (
             </div>
             {/* Forgot Password */}
             <div>
-            <Modal show={forgotPassshow} onHide={handleforgotPassClose} backdrop="static"
-        keyboard={false}>
+            <Modal show={forgotPassshow} 
+            onHide={handleforgotPassClose} 
+            backdrop="static"
+            keyboard={false} 
+            {...props}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered style={{
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)", 
+                borderRadius: "8px", 
+              }}>
                 <Modal.Header closeButton>
                 <Modal.Title>No problem we can help you get thru your account</Modal.Title>
                 </Modal.Header>
