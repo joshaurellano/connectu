@@ -16,6 +16,7 @@ import bgimg from '/5072612.jpg';
 function Login (props) {
     const navigate = useNavigate();
 
+
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -180,6 +181,8 @@ const handleRegister = async (e) =>{
         setRegLoading(false)
     };
 };
+    const { inline, ...filteredProps } = props;
+
     const [otpGenerateError, setOtpGenerateError ] = useState('');
     const [otp_username, setOtp_username] = useState('');
     const [otp_email, setOtp_email] = useState('');
@@ -200,17 +203,17 @@ const handleOtpGeneration = async (e) =>{
         await Swal.fire({
             title: "OTP sent!",
             icon: "success"
-          });
-        setOtp_username('');
-        setOtp_email('');
+          })
+          
+            navigate("/otp-verify");
     } catch (error){
         if(error.response && error.response.data && error.response.data.message){
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "An error occurred while registering. Please try again.",})
-
+                text: "An error occurred. Please try again.",})
             setOtpGenerateError(error.response.data.message);
+            navigate('/login');
         }
 
     }
@@ -384,7 +387,7 @@ return (
             onHide={handleforgotPassClose} 
             backdrop="static"
             keyboard={false} 
-            {...props}
+            {...filteredProps} 
             aria-labelledby="contained-modal-title-vcenter"
             centered style={{
                 boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)", 

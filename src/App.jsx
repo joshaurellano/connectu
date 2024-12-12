@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { jwtDecode } from 'jwt-decode';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import ForgotPass from './ForgotPass';
 import { API_ENDPOINT } from './Api';
 import { Row, Col } from 'react-bootstrap';
 
@@ -17,6 +18,7 @@ function App() {
             <Route path = "/" element={<Login />} />
             <Route path = "/login" element = {<Login />}/>
             <Route path = "/dashboard" element = {<Dashboard />}/>
+            <Route path = "/otp-verify" element = {<ForgotPass />}/>
         </Routes>
         </Router>
         </>
