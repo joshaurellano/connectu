@@ -121,6 +121,7 @@ const [show, setShow] = useState(false);
     {/*const for loading state of registration */}
     const [regloading, setRegLoading] = useState(false); // State to track loading
 
+
 const handleRegister = async (e) =>{
     e.preventDefault();
 
@@ -179,6 +180,42 @@ const handleRegister = async (e) =>{
         setRegLoading(false)
     };
 };
+    const [otpGenerateError, setOtpGenerateError ] = useState('');
+    const [otp_username, setOtp_username] = useState('');
+    const [otp_email, setOtp_email] = useState('');
+
+    const purpose = 'password_reset';
+// FOR OTP GENERATION
+const handleOtpGeneration = async (e) =>{
+    
+    e.preventDefault();
+
+    try {
+        const response = await axios.post(`${API_ENDPOINT}/otp/generate`, {
+            username : otp_username,
+            email : otp_email,
+            purpose
+        });
+        
+        await Swal.fire({
+            title: "OTP sent!",
+            icon: "success"
+          });
+        setOtp_username('');
+        setOtp_email('');
+    } catch (error){
+        if(error.response && error.response.data && error.response.data.message){
+            await Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An error occurred while registering. Please try again.",})
+
+            setOtpGenerateError(error.response.data.message);
+        }
+
+    }
+}
+
 const [passwordError, setPasswordError] = useState(null);
 
 const handleRePassword = async (e) => {
@@ -363,8 +400,8 @@ return (
                 <Form.Control
                     type="email"
                     placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={otp_email}
+                    onChange={(e) => setOtp_email(e.target.value)}
                     style={{ borderRadius: "8px" }}
                     required
                 />
@@ -373,8 +410,8 @@ return (
                 <Form.Control
                     type="text"
                     placeholder="Username"
-                    value={rusername}
-                    onChange={(e) => setrusername(e.target.value)}
+                    value={otp_username}
+                    onChange={(e) => setOtp_username(e.target.value)}
                     style={{ borderRadius: "8px" }}
                     required
                 />
@@ -385,7 +422,7 @@ return (
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleClose}>
+                <Button variant="primary" onClick={handleOtpGeneration}>
                     Submit
                 </Button>
                 </Modal.Footer>
