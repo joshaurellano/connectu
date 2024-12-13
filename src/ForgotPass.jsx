@@ -1,124 +1,136 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import { Card } from "react-bootstrap";
 
-import { API_ENDPOINT } from './Api';
-import { Nav,Navbar,Container,Button,Form, NavDropdown, NavbarBrand, Row, Col, Card, ListGroup } from 'react-bootstrap';
-import { jwtDecode } from 'jwt-decode';
+import { API_ENDPOINT } from "./Api";
 
-function ForgotPass () {
-    const [user, setUser] = useState(null);
+function ForgotPass({ length = 6 }) {
+    const [otp, setOtp] = useState(Array(length).fill("")); // State for OTP digits
+    const [error, setError] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const [email, setEmail] = useState('');
-    const [otpInput, setOtpInput] = useState('');
-    const [error, setError] = useState('');
+    const email = location.state?.email;
 
-    useEffect(() => {
-        const fetchDecodedUserID = async () => {
-            try {
-                const response = JSON.parse(sessionStorage.getItem('token'))
-                setUser(response.data);
+    // Handle OTP input change
+    const handleChange = (e, index) => {
+        const { value } = e.target;
 
-                const decoded_token = jwtDecode(response.data.token);
-                setUser(decoded_token);
-                sessionStorage.removeItem('token');
-            } catch (error) {
-                navigate ("/login");
+        if (/^\d*$/.test(value)) { // Allow only digits
+            const newOtp = [...otp];
+            newOtp[index] = value.slice(-1); // Keep only the last digit
+            setOtp(newOtp);
+
+            // Move focus to the next input
+            const nextInput = e.target.nextSibling;
+            if (nextInput && value) {
+                nextInput.focus();
             }
-        };
-    fetchDecodedUserID ();
-    }, []);
-
-    const handleVerifyOTP = async () => {
-        try {
-            const response = await axios.post(`${API_ENDPOINT}/otp/verify`, {
-                email,
-                otpInput
-            });
-
-            sessionStorage.removeItem('token');
-            navigate("/login");
-        } catch (error) {
-            setError(error);
         }
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const otpValue = otp.join(""); // Join OTP digits into a single string
+        if (otpValue.length !== length) {
+            alert("Please complete the OTP.");
+            return;
+        }
+
+        try {
+            const email = location.state?.email;
+            if (!email) {
+                throw new Error("Email not provided.");
+            }
+
+            const response = await axios.post(`${API_ENDPOINT}/otp/verify`, {
+                email,
+                otp: otpValue,
+            });
+
+            await Swal.fire({
+                title: "OTP verified!",
+                icon: "success",
+            });
+
+            sessionStorage.removeItem("token");
+            navigate("/login");
+        } catch (err) {
+            setError(err.response?.data?.message || "An error occurred.");
+        }
+    };
+
     return (
-    <>
-        <div>
-        <Navbar variant="dark" expand="lg" style={{backgroundColor:"#1C1C64", 
-            color:"white",
-            display:"flex",
-            alignItems:"center"
-            }}>
-            <Container>
-                <Navbar.Brand href = "#home" style={{color:"white"}}>Connect U</Navbar.Brand>
-            <Navbar.Toggle aria-controls="navbarScroll" />  
-            <Navbar.Collapse id = "navbarScroll">
-            <Nav className="me-auto my-2 my-lg-0">
-                <Nav.Link href='#'>Tell us what you feel</Nav.Link>
-                <Nav.Link  href='#'>Whats New</Nav.Link>
-                <Nav.Link  href='#'>Chat Us</Nav.Link>
-                </Nav>
-                    
-                <Form inline className="d-flex ms-auto">
-                    <Form.Control
-                    type="search"
-                    placeholder="Search"
-                    className="me-2 mt-3"
-                    aria-label="Search"
-                    style={{ height: '38px' }}
-                    />
-                    <Button variant="outline-success" className='mt-3' style={{
-                        height: '38px',}}>Search</Button>
-                </Form>
-
-                {/* <Nav className='ms-lg-3'>
-                <NavDropdown title={user ? `User: ${user.username}`:'Dropdown'} 
-                        id="basic-nav-dropdown"align="end">
-                        <NavDropdown.Item href="#">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="#">Settings</NavDropdown.Item>
-                        <NavDropdown.Item href="#" onClick={handleLogout}>Logout</NavDropdown.Item>
-                </NavDropdown>
-                </Nav> */}
-                </Navbar.Collapse>
-            
-            </Container>
-        </Navbar>
-
-       
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh", // Full viewport height
+                width: "100%", // Full viewport width
+                padding: "20px",
+                boxSizing: "border-box", // Avoid overflow due to padding
+            }}
+        >
+            <Card style={{ width: "100%", maxWidth: "500px", height: "100%",maxHeight:"500px", display: "flex", flexDirection: "column" }}>
+                <Card.Body style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <form
+                        onSubmit={handleSubmit}
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "16px",
+                            flex: 1,
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <p>A One Time Password Code was sent to your email:</p>
+                        <p>{email}</p>
+                        <div style={{ display: "flex", gap: "8px", justifyContent: "center", width: "100%" }}>
+                            {otp.map((digit, index) => (
+                                <input
+                                    key={index}
+                                    type="text"
+                                    maxLength="1"
+                                    value={digit}
+                                    onChange={(e) => handleChange(e, index)}
+                                    style={{
+                                        width: "40px",
+                                        height: "60px",
+                                        textAlign: "center",
+                                        fontSize: "18px",
+                                        border: "1px solid #ccc",
+                                        borderRadius: "4px",
+                                        flex: 1,
+                                    }}
+                                />
+                            ))}
+                        </div>
+                        <button
+                            type="submit"
+                            style={{
+                                padding: "12px 24px",
+                                fontSize: "16px",
+                                backgroundColor: "#007bff",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "4px",
+                                width: "100%",
+                                maxWidth: "200px",
+                            }}
+                        >
+                            Verify
+                        </button>
+                    </form>
+                    {error && <p style={{ color: "red", marginTop: "16px" }}>{error}</p>}
+                </Card.Body>
+            </Card>
         </div>
-
-        <div>
-        <Container>
-            <Form>
-            <Form.Group className="mb-3">
-                <Form.Control
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{ borderRadius: "8px" }}
-                    required
-                />
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <Form.Control
-                    type="OTP"
-                    placeholder="otp"
-                    value={otpInput}
-                    onChange={(e) => setOtpInput(e.target.value)}
-                    style={{ borderRadius: "8px" }}
-                    required
-                />
-            </Form.Group>
-            <Button variant='Primary' className='w-100' onClick={handleVerifyOTP}>Submit</Button>
-            </Form>
-        
-            </Container>
-        </div>
-        
-    </> 
-    )
+    );
 }
-export default ForgotPass
+
+export default ForgotPass;

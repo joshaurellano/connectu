@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 
 import bgimg from '/5072612.jpg';
 
-function Login (props) {
+function Login () {
     const navigate = useNavigate();
 
 
@@ -43,17 +43,17 @@ const [error, setError] = useState('');
 {/*const for loading state of login */}
 const [loading, setLoading] = useState(false); // State to track loading
 
-    const [forgotPassshow, setforgotPassShow] = useState(false);
+const [forgotPassshow, setforgotPassShow] = useState(false);
     
-  const handleforgotPassClose = () => {
-    setforgotPassShow(false);
-    setIsBlurred(false);  
+const handleforgotPassClose = () => {
+setforgotPassShow(false);
+setIsBlurred(false);  
 }
-  const handleforgotPassShow = () => {
-    setforgotPassShow(true);
-    setIsBlurred(true);}
+const handleforgotPassShow = () => {
+setforgotPassShow(true);
+setIsBlurred(true);}
 
-  const [isBlurred, setIsBlurred] = useState(false);
+const [isBlurred, setIsBlurred] = useState(false);
 
 
 const handleSubmit = async (e) => {
@@ -181,7 +181,6 @@ const handleRegister = async (e) =>{
         setRegLoading(false)
     };
 };
-    const { inline, ...filteredProps } = props;
 
     const [otpGenerateError, setOtpGenerateError ] = useState('');
     const [otp_username, setOtp_username] = useState('');
@@ -205,7 +204,7 @@ const handleOtpGeneration = async (e) =>{
             icon: "success"
           })
           
-            navigate("/otp-verify");
+            navigate("/otp-verify",{ state: { email: otp_email } });
     } catch (error){
         if(error.response && error.response.data && error.response.data.message){
             await Swal.fire({
@@ -218,6 +217,7 @@ const handleOtpGeneration = async (e) =>{
 
     }
 }
+
 
 const [passwordError, setPasswordError] = useState(null);
 
@@ -387,7 +387,6 @@ return (
             onHide={handleforgotPassClose} 
             backdrop="static"
             keyboard={false} 
-            {...filteredProps} 
             aria-labelledby="contained-modal-title-vcenter"
             centered style={{
                 boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)", 
