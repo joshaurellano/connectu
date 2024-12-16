@@ -5,7 +5,7 @@ import axios from 'axios';
 import { API_ENDPOINT } from './Api';
 import {
   Nav, Navbar, Container, Button, Form, NavDropdown,
-  Row, Col, Card, ListGroup, Modal
+  Row, Col, Card, ListGroup
 } from 'react-bootstrap';
 import {jwtDecode} from 'jwt-decode';
 
@@ -14,11 +14,6 @@ function Dashboard() {
   const [topics, setTopics] = useState([]);
   const [subtopics, setSubTopics] = useState({});
   const navigate = useNavigate();
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   // Decode user token
   useEffect(() => {
@@ -85,48 +80,6 @@ function Dashboard() {
 
   return (
     <>
-
-    <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Post New Thread</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        {topics.length > 0 ? (
-              topics.map((t, key) => (
-                <Card key={t.topic_id} style={{ marginBottom: "15px" }}>
-                  <Card.Body>
-                    <h5>{t.topic_name}</h5>
-                    <ListGroup>
-                        {
-                            subtopics[t.topic_id] && subtopics[t.topic_id].length > 0 ? (
-                                subtopics[t.topic_id].map((s, key) => (
-                                    <ListGroup.Item 
-                                    key={s.subtopic_id}
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={() => navigate(`/post`, { state: { topic_id: t.topic_id, subtopic_id: s.subtopic_id,user_id: user?.user_id } })}>
-                                        {s.subtopic_name}
-                                    </ListGroup.Item>
-                                ))
-                            ) : (<p>No subtopics Available</p>)
-                        }
-                    </ListGroup>
-                  </Card.Body>
-                </Card>
-              ))
-            ) : (
-              <p>No topics available. Please check back later.</p>
-            )}
-            </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
       <Navbar variant="dark" expand="lg" style={{
         backgroundColor: "#1C1C64",
         color: "white",
@@ -158,7 +111,7 @@ function Dashboard() {
               <NavDropdown
                 title={user ? `User: ${user.username}` : 'Dropdown'}
                 id="basic-nav-dropdown" align="end">
-                <NavDropdown.Item onClick={() => navigate ('/profile')}>Profile</NavDropdown.Item>
+                <NavDropdown.Item href="#">Profile</NavDropdown.Item>
                 <NavDropdown.Item href="#">Settings</NavDropdown.Item>
                 <NavDropdown.Item href="#" onClick={handleLogout}>Logout</NavDropdown.Item>
               </NavDropdown>
@@ -190,7 +143,7 @@ function Dashboard() {
                 backgroundColor: "#4CAF50",
                 borderColor: "#4CAF50"
               }}>New Posts</Button>
-              <Button onClick={handleShow} style={{
+              <Button style={{
                 borderRadius: "0",
                 padding: "10px 20px",
                 backgroundColor: "#FF8C00",
@@ -227,30 +180,6 @@ function Dashboard() {
               <p>No topics available. Please check back later.</p>
             )}
           </Col>
-
-          <Col lg={3}>
-                    <Card>
-                    <Card.Body>
-                    <Card.Header>
-                    <Card.Title>New Topics</Card.Title>
-                    </Card.Header>
-
-                    </Card.Body>
-                    </Card>
-
-                    <Card className='mt-5'>
-                    <Card.Body>
-                    <Card.Header>
-                    <Card.Title>Page Statistics</Card.Title>
-                    </Card.Header>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item>Total Members</ListGroup.Item>
-                            <ListGroup.Item>Total Online Users</ListGroup.Item>
-                            <ListGroup.Item>Visitors</ListGroup.Item>
-                        </ListGroup>
-                    </Card.Body>
-                    </Card>
-                    </Col>
         </Row>
       </Container>
     </>
