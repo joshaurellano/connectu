@@ -13,8 +13,8 @@ import {
 
 import Swal from 'sweetalert2';
 
-
 import { FaUser } from "react-icons/fa6";
+import Cookies from 'js-cookie';
 
 
 function Profile() {
@@ -58,15 +58,19 @@ function Profile() {
 
   const headers = {
     accept: "application/json",
-    Authorization: JSON.parse(localStorage.getItem('token')).data.token
+    Authorization: Cookies.get('token')
   };
 
   // Decode user token and set user state
   useEffect(() => {
     const fetchDecodedUserID = async () => {
       try {
-        const tokenData = JSON.parse(localStorage.getItem('token'));
-        const decodedToken = jwtDecode(tokenData.data.token);
+        // const tokenData = JSON.parse(localStorage.getItem('token'));
+        // const decodedToken = jwtDecode(tokenData.data.token);
+        const token = Cookies.get('token');
+        const decodedToken = jwtDecode(token);
+
+
         setUser({ userId: decodedToken.user_id, username: decodedToken.username });
       } catch (error) {
         console.error('Token decoding failed:', error);
@@ -190,7 +194,7 @@ function Profile() {
 
   // Logout handler
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    Cookies.remove('token');
     navigate("/login");
   };
 

@@ -5,17 +5,20 @@ import axios from 'axios';
 import { API_ENDPOINT } from './Api';
 import {
   Nav, Navbar, Container, Button, Form, NavDropdown,
-  Row, Col, Card, ListGroup, Modal, InputGroup
+  Row, Col, Card, ListGroup, Modal, InputGroup, Spinner
 } from 'react-bootstrap';
 
 import { FaPenToSquare } from "react-icons/fa6";
 import Swal from 'sweetalert2';
 
-
 import {jwtDecode} from 'jwt-decode';
+
+import Cookies from 'js-cookie';
 
 function Post() {
   const [user, setUser] = useState(null);
+  const [postLoading, setPostLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,8 +30,10 @@ function Post() {
   useEffect(() => {
     const fetchDecodedUserID = async () => {
       try {
-        const response = JSON.parse(localStorage.getItem('token'));
-        const decodedToken = jwtDecode(response.data.token);
+        const token = Cookies.get('token');
+        // const response = JSON.parse(localStorage.getItem('token'));
+        // const decodedToken = jwtDecode(response.data.token);
+        const decodedToken = jwtDecode(token)
         setUser(decodedToken);
       } catch (error) {
         navigate("/login");
@@ -42,7 +47,7 @@ function Post() {
   // Logout handler
   const handleLogout = async () => {
     try {
-      localStorage.removeItem('token');
+      Cookies.remove('token');
       navigate("/login");
     } catch (error) {
       console.error('Logout failed', error);
@@ -51,7 +56,7 @@ function Post() {
 
   const headers = {
     accept: "application/json",
-    Authorization: JSON.parse(localStorage.getItem('token')).data.token
+    Authorization: Cookies.get('token')
   };
 
   //Create Post
@@ -61,34 +66,35 @@ function Post() {
   const [validationError,setValidationError] = useState([])
 
   const addPost = async (e) => {
+    setPostLoading(true);
     e.preventDefault();
-
+try{
   await axios.post(`${API_ENDPOINT}/post`,{title,body, user_id, topic_id, subtopic_id},{headers:headers}).then(({data})=>{
     
     console.log(`Topic ID: ${topic_id}`);
     console.log(`Subtopic ID: ${subtopic_id}`);
     console.log(`User ID: ${user_id}`);
     
-    Swal.Fire({
+    setPostLoading(false);
+    Swal.fire({
       icon:"success",
       text:data.message
     })
-  }).catch(({}))
-    if(response.status===422){
-      setValidationError(response.data.errors)
+  })
+} catch(error) {
+    if(error.response.status===422){
+      setValidationError(error.response.data.errors)
     }else{
       Swal.fire({
-        text:response.data.message,
+        text: error.response?.data?.message || "An error occurred while creating the post.",
         icon:"error"
       })
     }
   }
-
-  
+}
 
   return (
     <>
-
       <Navbar variant="dark" expand="lg" style={{
         backgroundColor: "#1C1C64",
         color: "white",
@@ -216,7 +222,16 @@ function Post() {
                     padding: "10px 20px",
                     backgroundColor: "#FF8C00",
                     borderColor: "#FF8C00",
-                    }}><FaPenToSquare /> Post</Button>
+                    }}
+                    disabled={postLoading}>
+                      {postLoading ? (
+                        <>
+                        <Spinner animation="border" />
+                      </>):(
+                        <>
+                      <FaPenToSquare /> Post
+                      </>)}
+                    </Button>
 
                 </div>
                 </Form>

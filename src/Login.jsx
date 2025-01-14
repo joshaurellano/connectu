@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import { API_ENDPOINT } from './Api';
 import { Navbar,Container,Button,Form, Row, Col,Nav,Modal, Spinner } from 'react-bootstrap';
@@ -15,26 +16,24 @@ import bgimg from '/5072612.jpg';
 
 function Login () {
     const navigate = useNavigate();
+//     const [user, setUser] = useState(null);
 
+//     useEffect(() => {
+//         const fetchUser = async () => {
+//         try {
+//             const response = JSON.parse(localStorage.getItem('token'))
+//             setUser(response.data);
 
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-        try {
-            const response = JSON.parse(localStorage.getItem('token'))
-            setUser(response.data);
-
-                navigate("/dashboard");
-        } catch (error) {
-            localStorage.removeItem('token');
-            navigate("/login");
-        }
+//                 navigate("/dashboard");
+//         } catch (error) {
+//             localStorage.removeItem('token');
+//             navigate("/login");
+//         }
         
-    };
-    fetchUser();
+//     };
+//     fetchUser();
 
-}, []);
+// }, []);
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
 
@@ -67,7 +66,8 @@ const response = await axios.post(`${API_ENDPOINT}/admin/login`, {
     username,
     password,
 });
-localStorage.setItem("token",JSON.stringify(response));
+// localStorage.setItem("token",JSON.stringify(response));
+Cookies.set('token', response.data.token, { expires: 7, secure: true, sameSite: 'Strict' });
 setError('');
 
 setLoading(false);
@@ -101,14 +101,19 @@ const clearField = () => {
     setRegisterError('');
 };
 
-{/*for modal */}
+{/*for registration modal */}
 
 const [show, setShow] = useState(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setShow(true);
+        setIsBlurred(true)
+    }
+
     const handleClose = () => {
         setShow(false);
         setRegisterError ('');
         clearField ();
+        setIsBlurred(false)
     }
     const [registerError,setRegisterError] = useState('');
     
@@ -393,7 +398,7 @@ return (
                 borderRadius: "8px", 
               }}>
                 <Modal.Header closeButton>
-                <Modal.Title>No problem we can help you get thru your account</Modal.Title>
+                <Modal.Title>Forgot Password?</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Please let us know your username and email <br />
                 <Form>

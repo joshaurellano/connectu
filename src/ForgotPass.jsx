@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Card } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 import { API_ENDPOINT } from "./Api";
 
 function ForgotPass({ length = 6 }) {
-    const [otp, setOtp] = useState(Array(length).fill("")); // State for OTP digits
+    const [otp, setOtp] = useState(Array(length).fill("")); 
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
 
     const email = location.state?.email;
+
+    React.useEffect(() => {
+        if (!email) {
+        navigate("/login");
+        }
+    }, [email, navigate]);
+
 
     // Handle OTP input change
     const handleChange = (e, index) => {
@@ -40,24 +48,35 @@ function ForgotPass({ length = 6 }) {
         }
 
         try {
-            const email = location.state?.email;
-            if (!email) {
-                throw new Error("Email not provided.");
-            }
+            // const email = location.state?.email;
+            // if (!email) {
+            //     throw new Error("Email not provided.");
+            // }
 
+            console.log(email, otpValue);
+
+        
             const response = await axios.post(`${API_ENDPOINT}/otp/verify`, {
                 email,
-                otp: otpValue,
-            });
+                otpInput: otpValue,
+            }); 
+
+
+            // localStorage.setItem("token",JSON.stringify(response));
+            setError('');
 
             await Swal.fire({
-                title: "OTP verified!",
                 icon: "success",
+                title: "OTP verified!",
+                text: "OTP verification successful"
+                
             });
-
-            sessionStorage.removeItem("token");
-            navigate("/login");
         } catch (err) {
+            await Swal.fire({
+                icon: "error",
+                title: "OTP verification error",
+                text: err.response?.data?.message
+            })
             setError(err.response?.data?.message || "An error occurred.");
         }
     };

@@ -5,9 +5,10 @@ import axios from 'axios';
 import { API_ENDPOINT } from './Api';
 import {
   Nav, Navbar, Container, Button, Form, NavDropdown,
-  Row, Col, Card, ListGroup, Modal
+  Row, Col, Card, ListGroup, Modal, Placeholder
 } from 'react-bootstrap';
 import {jwtDecode} from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -24,9 +25,14 @@ function Dashboard() {
   useEffect(() => {
     const fetchDecodedUserID = async () => {
       try {
-        const response = JSON.parse(localStorage.getItem('token'));
-        const decodedToken = jwtDecode(response.data.token);
+        // const response = JSON.parse(localStorage.getItem('token'));
+        // const decodedToken = jwtDecode(response.data.token);
+        // setUser(decodedToken);
+
+        const token = Cookies.get('token')
+        const decodedToken = jwtDecode(token);
         setUser(decodedToken);
+
       } catch (error) {
         navigate("/login");
       }
@@ -37,7 +43,9 @@ function Dashboard() {
   // Logout handler
   const handleLogout = async () => {
     try {
-      localStorage.removeItem('token');
+      // localStorage.removeItem('token');
+
+      Cookies.remove('token');
       navigate("/login");
     } catch (error) {
       console.error('Logout failed', error);
@@ -47,7 +55,8 @@ function Dashboard() {
   // Fetch topics
   const headers = {
     accept: "application/json",
-    Authorization: JSON.parse(localStorage.getItem('token')).data.token
+    // Authorization: JSON.parse(localStorage.getItem('token')).data.token
+    Authorization: Cookies.get('token')
   };
 
   const fetchTopics = async () => {
@@ -85,7 +94,6 @@ function Dashboard() {
 
   return (
     <>
-
     <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Post New Thread</Modal.Title>
@@ -212,19 +220,27 @@ function Dashboard() {
                     <ListGroup>
                         {
                             subtopics[t.topic_id] && subtopics[t.topic_id].length > 0 ? (
-                                subtopics[t.topic_id].map((s, key) => (
+                              subtopics[t.topic_id].map((s, key) => (
                                     <ListGroup.Item key={s.subtopic_id}>
                                         {s.subtopic_name}
                                     </ListGroup.Item>
                                 ))
-                            ) : (<p>No subtopics Available</p>)
+                            ) : (<>
+                              <Placeholder as="p" animation="glow">
+                                <Placeholder xs={12} />
+                              </Placeholder>
+                            </>)
                         }
                     </ListGroup>
                   </Card.Body>
                 </Card>
               ))
             ) : (
-              <p>No topics available. Please check back later.</p>
+              <>
+                <Placeholder as="p" animation="glow">
+                <Placeholder xs={12} />
+                </Placeholder>
+              </>
             )}
           </Col>
 

@@ -10,10 +10,8 @@ import {
 } from 'react-bootstrap';
 
 import { FaReply } from "react-icons/fa";
-
 import Swal from 'sweetalert2';
-
-
+import Cookies from 'js-cookie';
 
 function ViewPost() {
   const [user, setUser] = useState({ userId: null, username: 'Guest' });
@@ -28,7 +26,7 @@ function ViewPost() {
 
   const headers = {
     accept: "application/json",
-    Authorization: JSON.parse(localStorage.getItem('token')).data.token
+    Authorization: Cookies.get('token')
   };
 
 
@@ -36,8 +34,10 @@ function ViewPost() {
   useEffect(() => {
     const fetchDecodedUserID = async () => {
       try {
-        const tokenData = JSON.parse(localStorage.getItem('token'));
-        const decodedToken = jwtDecode(tokenData.data.token);
+        // const tokenData = JSON.parse(localStorage.getItem('token'));
+        // const decodedToken = jwtDecode(tokenData.data.token);
+        const token = Cookies.get('token');
+        const decodedToken = jwtDecode(token);
         setUser({ userId: decodedToken.user_id, username: decodedToken.username });
       } catch (error) {
         console.error('Token decoding failed:', error);
@@ -120,7 +120,7 @@ function ViewPost() {
 
   // Logout handler
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    Cookies.remove('token');
     navigate("/login");
   };
 
